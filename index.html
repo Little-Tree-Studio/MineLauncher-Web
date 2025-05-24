@@ -3,729 +3,370 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MineLauncher - Minecraft启动器</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <link href="https://fonts.cdnfonts.com/css/minecraft-4" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f3f3f3;
-            color: #000000;
-            line-height: 1.6;
-            overflow-x: hidden;
-            animation: fadeIn 0.8s ease-out;
-            opacity: 0;
-            animation-fill-mode: forwards;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @font-face {
-            font-family: 'Minecraft';
-            src: url('https://fonts.cdnfonts.com/css/minecraft-4');
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-        header {
-            background-color: rgba(76, 166, 255, 0.9);
-            backdrop-filter: blur(10px);
-            padding: 40px 0;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            color: white;
-            margin-bottom: -1px; /* 消除白边 */
-            z-index: 10;
-        }
-        header::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: linear-gradient(90deg, 
-                rgba(255,255,255,0.2) 0%, 
-                rgba(255,255,255,0.8) 50%, 
-                rgba(255,255,255,0.2) 100%);
-            opacity: 0.7;
-        }
-        @keyframes gradient {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
-        }
-        h1 {
-            margin: 0;
-            color: #ffffff;
-            position: relative;
-            width: fit-content;
-            margin: 0 auto;
-            font-family: 'Minecraft', 'Segoe UI', sans-serif;
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 4px solid #ffffff;
-            animation: 
-                typing 1.5s steps(11, end) 0.5s forwards,
-                blink-caret 0.75s step-end 2s infinite;
-        }
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-        @keyframes blink-caret {
-            from, to { border-color: transparent }
-            50% { border-color: #3A8FE6 }
-        }
-        .hero {
-            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('img/back.png');
-            background-size: cover;
-            background-position: center;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            margin-top: -1px; /* 消除白边 */
-            position: relative;
-            z-index: 5;
-            animation: heroFadeIn 1s ease-out;
-        }
-        @keyframes heroFadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .video-container {
-            padding: 80px 0;
-            background-color: #f8f9fa;
-            text-align: center;
-        }
-        .video-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        .video-wrapper h2 {
-            font-size: 2.2em;
-            margin-bottom: 30px;
-            color: #3A8FE6;
-        }
-        .video-placeholder {
-            position: relative;
-            padding-bottom: 56.25%; /* 16:9 宽高比 */
-            height: 0;
-            overflow: hidden;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            background-color: #000;
-        }
-        .video-placeholder video {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: all 0.3s ease;
-        }
-        .video-placeholder:hover video {
-            transform: scale(1.02);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-        }
-        /* 自定义播放控件 */
-        video::-webkit-media-controls {
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        video:hover::-webkit-media-controls {
-            opacity: 1;
-        }
-        video::-webkit-media-controls-play-button,
-        video::-webkit-media-controls-mute-button {
-            background-color: rgba(58, 143, 230, 0.7);
-            border-radius: 50%;
-            margin-right: 10px;
-            transform: scale(1.2);
-            padding: 12px;
-        }
-        video::-webkit-media-controls {
-            padding: 20px;
-            height: 80px;
-        }
-        .video-error {
-            display: none;
-            color: #ff6b6b;
-            padding: 20px;
-            background: rgba(255,255,255,0.9);
-            border-radius: 8px;
-            margin-top: 20px;
-        }
-        video:not([src]) + .video-error {
-            display: block;
-        }
-
-        .hero-content {
-            max-width: 800px;
-            padding: 30px;
-            background-color: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            animation: contentFadeIn 1.5s ease-out;
-        }
-        @keyframes contentFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .btn {
-            display: inline-block;
-            background: linear-gradient(145deg, #4CA6FF, #3A8FE6);
-            color: white;
-            padding: 15px 35px;
-            text-decoration: none;
-            border-radius: 6px;
-            font-weight: 600;
-            margin-top: 25px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2), 
-                        inset 0 1px 0 rgba(255,255,255,0.2);
-            border: 2px solid rgba(255,255,255,0.3);
-            text-shadow: 0 1px 2px rgba(0,0,0,0.3);
-            position: relative;
-            overflow: hidden;
-            font-size: 1.1em;
-            letter-spacing: 1px;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background-color: #3A8FE6;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-            transform: translateY(-1px);
-        }
-        .btn:active {
-            background-color: #2D7FD6;
-            transform: translateY(2px) scale(0.98);
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
-            transition: all 0.1s ease;
-        }
-        .btn.disabled {
-            background: linear-gradient(145deg, #3d3d3d, #2d2d2d);
-            cursor: not-allowed;
-            opacity: 0.7;
-            pointer-events: none;
-        }
-        .btn.disabled small {
-            display: block;
-            font-size: 12px;
-            margin-top: 5px;
-            color: #8BC34A;
-        }
-        .features {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            margin: 50px 0;
-        }
-        .feature {
-            flex-basis: 30%;
-            background: linear-gradient(135deg, rgba(255,255,255,0.85), rgba(245,245,245,0.9));
-            backdrop-filter: blur(12px);
-            padding: 28px;
-            margin-bottom: 25px;
-            border-radius: 12px;
-            box-shadow: 0 8px 24px rgba(58, 143, 230, 0.12);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 1px solid rgba(255,255,255,0.4);
-            position: relative;
-            overflow: hidden;
-            color: #333;
-            z-index: 1;
-        }
-        .feature:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 16px 32px rgba(58, 143, 230, 0.2);
-            background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(250,250,250,0.95));
-            z-index: 2;
-        }
-        .feature::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 0%, rgba(76, 166, 255, 0.08), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        .feature:hover::after {
-            opacity: 1;
-        }
-        .feature {
-            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
-        .feature::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #3A8FE6, #4CA6FF);
-        }
-
-        .developer-section {
-            margin: 60px 0;
-            text-align: center;
-        }
-        .developers-container {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 30px;
-            margin: 40px auto;
-            max-width: 1200px;
-        }
-        .developer-card {
-            background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(245,245,245,0.95));
-            backdrop-filter: blur(12px);
-            border-radius: 12px;
-            padding: 25px;
-            width: 350px;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 8px 24px rgba(58, 143, 230, 0.15);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            color: #333;
-            border: 1px solid rgba(255,255,255,0.5);
-            opacity: 0;
-            animation: cardFadeIn 0.6s ease-out forwards;
-            z-index: 1;
-        }
-        .developer-card:nth-child(1) { animation-delay: 0.2s; }
-        .developer-card:nth-child(2) { animation-delay: 0.4s; }
-        .developer-card:nth-child(3) { animation-delay: 0.6s; }
-        @keyframes cardFadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .developer-card:hover {
-            transform: translateY(-8px) scale(1.03);
-            box-shadow: 0 16px 32px rgba(58, 143, 230, 0.25);
-            background: linear-gradient(145deg, rgba(255,255,255,0.95), rgba(250,250,250,0.98));
-            z-index: 2;
-        }
-        .developer-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, #4CA6FF, #3A8FE6);
-        }
-        .developer-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle at 50% 0%, rgba(76, 166, 255, 0.1), transparent 70%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        .developer-card:hover::after {
-            opacity: 1;
-        }
-        .developer-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            margin-right: 20px;
-            object-fit: cover;
-            border: 3px solid #4CAF50;
-            flex-shrink: 0;
-        }
-        .developer-info {
-            text-align: left;
-        }
-        .developer-title {
-            color: #3A8FE6;
-            margin: 10px 0;
-            font-style: normal;
-            font-weight: 500;
-        }
-        .developer-bio {
-            line-height: 1.6;
-        }
-        @media (max-width: 768px) {
-            .developer-card {
-                flex-direction: column;
-                text-align: center;
-            }
-            .developer-avatar {
-                margin: 0 auto 20px;
-            }
-            .developer-info {
-                text-align: center;
-            }
-        }
-        .feature h3 {
-            color: #3A8FE6;
-            margin-top: 0;
-        }
-        footer {
-            background-color: rgba(76, 166, 255, 0.85);
-            backdrop-filter: blur(10px);
-            text-align: center;
-            padding: 30px;
-            margin-top: 60px;
-            position: relative;
-            color: white;
-            transform: translateY(50px);
-            opacity: 0;
-            animation: footerSlideIn 0.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards 0.8s;
-        }
-        @keyframes footerSlideIn {
-            from { transform: translateY(50px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, rgba(76, 166, 255, 0.7), rgba(58, 143, 230, 0.7));
-        }
-        footer p {
-            margin: 10px 0;
-            transition: all 0.3s ease;
-        }
-        footer p:hover {
-            transform: scale(1.05);
-            color: #8BC34A;
-        }
-        .social-icons {
-            margin: 20px 0;
-        }
-        .social-icons a {
-            color: white;
-            margin: 0 10px;
-            font-size: 24px;
-            transition: all 0.3s ease;
-        }
-        .social-icons a:hover {
-            color: #4CAF50;
-            transform: translateY(-3px);
-        }
-        @media (max-width: 768px) {
-            .feature {
-                flex-basis: 100%;
-            }
-        }
-    </style>
+    <title>MineLauncher - 专业的Minecraft启动器</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header style="
-        padding: 15px 0;
-        background: linear-gradient(135deg, rgba(45,45,45,0.95), rgba(30,60,80,0.95));
-        backdrop-filter: blur(8px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        border-bottom: 1px solid rgba(58, 143, 230, 0.3);
-        position: relative;
-        z-index: 100;
-    ">
-        <div class="container" style="position: relative; height: 50px; display: flex; align-items: center; justify-content: center;">
-            <h1 style="position: absolute; top: 10px; left: 20px; margin: 0; animation: none; border-right: none; font-size: 2.2em; color: #3A8FE6;">MineLauncher</h1>
-            
-            <div class="header-center" style="display: flex; gap: 30px;">
-                <a href="#feature3" onclick="scrollToSection('feature3')" style="
-                    color: rgba(255,255,255,0.9);
-                    text-decoration: none;
-                    font-weight: 600;
-                    font-size: 1.1em;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                    transition: all 0.3s ease;
-                ">功能</a>
-                <a href="#download" style="
-                    color: rgba(255,255,255,0.9);
-                    text-decoration: none;
-                    font-weight: 600;
-                    font-size: 1.1em;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                    transition: all 0.3s ease;
-                ">下载</a>
-                <a href="#about" style="
-                    color: rgba(255,255,255,0.9);
-                    text-decoration: none;
-                    font-weight: 600;
-                    font-size: 1.1em;
-                    padding: 8px 12px;
-                    border-radius: 6px;
-                    transition: all 0.3s ease;
-                ">关于</a>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-cube"></i>
+                <span>MineLauncher</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#features" class="nav-link">功能特色</a></li>
+                <li><a href="#download" class="nav-link">立即下载</a></li>
+                <li><a href="#team" class="nav-link">开发团队</a></li>
+                <li><a href="#about" class="nav-link">关于我们</a></li>
+            </ul>
+            <div class="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <style>
-        .header-center a:hover {
-            background: rgba(58, 143, 230, 0.2);
-            color: #fff !important;
-            transform: translateY(-2px);
-        }
-    </style>
-
+    <!-- 英雄区域 -->
     <section class="hero">
+        <div class="hero-background">
+            <div class="hero-overlay"></div>
+        </div>
         <div class="hero-content">
-            <h2 style="text-shadow: 0 2px 4px rgba(0,0,0,0.5); color: #fff; font-size: 2.5em;">开启你的Minecraft冒险</h2>
-            <p style="text-shadow: 0 1px 3px rgba(0,0,0,0.5); color: #fff; font-size: 1.2em; font-weight: 500;">MineLauncher提供流畅的游戏体验，支持多种版本和模组管理</p>
-            <div style="margin-top: 40px;">
-                <a href="#download" class="btn" style="padding: 18px 40px; font-size: 1.2em;">
-                    <i class="fas fa-download" style="margin-right: 10px;"></i>立即下载
-                </a>
+            <div class="hero-text">
+                <h1 class="hero-title">
+                    <span class="gradient-text">MineLauncher</span>
+                </h1>
+                <p class="hero-subtitle">专业的Minecraft启动器，为您提供极致的游戏体验</p>
+                <p class="hero-description">支持多版本管理、模组整合、资源包管理等强大功能</p>
+                <div class="hero-buttons">
+                    <a href="#download" class="btn btn-primary">
+                        <i class="fas fa-download"></i>
+                        立即下载
+                    </a>
+                    <a href="#features" class="btn btn-secondary">
+                        <i class="fas fa-play"></i>
+                        了解更多
+                    </a>
+                </div>
             </div>
+            <!-- <div class="hero-stats">
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">活跃用户</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">支持版本</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">99.9%</span>
+                    <span class="stat-label">稳定性</span>
+                </div>
+            </div> -->
         </div>
     </section>
 
-    <div class="container">
-        <section class="video-container" style="opacity: 0; transform: translateY(30px); transition: all 0.8s ease;">
-            <div class="video-wrapper">
-                <h2>MineLauncher 宣传视频</h2>
-                <div class="video-placeholder">
-                    <video controls poster="img/video-poster.jpg">
+    <!-- 视频展示区域 -->
+    <section class="video-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>产品演示</h2>
+                <p>观看MineLauncher的功能演示视频</p>
+            </div>
+            <div class="video-container">
+                <div class="video-wrapper">
+                    <video controls poster="img/video-poster.jpg" preload="metadata">
                         <source src="vid/test.mp4" type="video/mp4">
                         <source src="vid/test.webm" type="video/webm">
-                        <p class="video-error">视频加载失败，请检查文件路径或浏览器支持</p>
+                        <div class="video-fallback">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <p>抱歉，您的浏览器不支持视频播放</p>
+                        </div>
                     </video>
-                </div>
-            </div>
-        </section>
-
-        <section class="features">
-            <div class="feature">
-                <h3>多版本支持</h3>
-                <p>轻松切换不同版本的Minecraft，从经典到最新版本一应俱全</p>
-            </div>
-            <div class="feature">
-                <h3>模组管理</h3>
-                <p>简单直观的模组管理界面，一键安装和更新模组带给你极致的体验</p>
-            </div>
-            <div class="feature" id="feature3">
-                <h3>轻量高效</h3>
-                <p>占用资源少，启动速度快，提供流畅的游戏体验</p>
-            </div>
-            <div class="feature">
-                <h3>资源包整合</h3>
-                <p>便捷的资源包管理，轻松切换不同视觉风格</p>
-            </div>
-            <div class="feature">
-                <h3>多账号切换</h3>
-                <p>支持多个游戏账号，一键快速切换</p>
-            </div>
-            <div class="feature">
-                <h3>服务器收藏</h3>
-                <p>内置服务器收藏夹，快速访问常用服务器</p>
-            </div>
-            <div class="feature">
-                <h3>游戏统计</h3>
-                <p>详细记录游戏时长和成就数据</p>
-            </div>
-            <div class="feature">
-                <h3>自动更新</h3>
-                <p>自动检测并安装最新版本，保持最佳体验</p>
-            </div>
-            <div class="feature">
-                <h3>截图管理</h3>
-                <p>内置截图查看器，方便管理游戏精彩瞬间</p>
-            </div>
-            <div class="feature">
-                <h3>自定义皮肤</h3>
-                <p>轻松上传和管理角色皮肤</p>
-            </div>
-            <div class="feature">
-                <h3>游戏备份</h3>
-                <p>一键备份和恢复游戏存档</p>
-            </div>
-            <div class="feature">
-                <h3>光影管理</h3>
-                <p>内置光影包安装和管理功能</p>
-            </div>
-            <div class="feature">
-                <h3>多语言支持</h3>
-                <p>支持多种语言界面切换</p>
-            </div>
-        </section>
-
-        <section class="developer-section">
-            <h2>开发团队</h2>
-            <div class="developers-container">
-                <div class="developer-card">
-                    <img src="img/shu-shu-1.jpg" alt="Shu Shu" class="developer-avatar">
-                    <div class="developer-info">
-                        <h3>Shu Shu</h3>
-                        <p class="developer-title">项目发起者 & UI设计</p>
-                        <p class="developer-bio">负责项目规划和界面设计</p>
+                    <div class="video-overlay">
+                        <button class="play-button">
+                            <i class="fas fa-play"></i>
+                        </button>
                     </div>
-                </div>
-                <div class="developer-card">
-                    <img src="img/kylemarvin884.png" alt="Kyle" class="developer-avatar">
-                    <div class="developer-info">
-                        <h3>Kyle</h3>
-                        <p class="developer-title">功能实现</p>
-                        <p class="developer-bio">负责启动器核心功能开发</p>
-                    </div>
-                </div>
-                <div class="developer-card">
-                    <img src="img/卡哇伊.jpg" alt="kawayi" class="developer-avatar">
-                    <div class="developer-info">
-                        <h3>kawayi</h3>
-                        <p class="developer-title">AI制作</p>
-                        <p class="developer-bio">负责AI相关功能开发</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="download">
-            <h2>下载 MineLauncher</h2>
-            <p>选择适合您操作系统的版本：</p>
-            <div class="download-options">
-                <a href="https://github.com/shu-shu-1/MineLauncher" class="btn" target="_blank">Windows 版</a>
-                <a class="btn disabled">macOS 版<br><small>(暂未开放)</small></a>
-                <a class="btn disabled">Linux 版<br><small>(暂未开放)</small></a>
-            </div>
-        </section>
-    </div>
-
-    <section id="about" class="about-section" style="
-        padding: 80px 0;
-        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
-        text-align: center;
-        opacity: 0;
-        transform: translateY(30px);
-        transition: all 0.8s ease;
-    ">
-        <div class="container">
-            <h2 style="color: #3A8FE6; margin-bottom: 40px; font-size: 2.2em;">关于 MineLauncher</h2>
-            <div class="about-content" style="
-                max-width: 800px;
-                margin: 0 auto;
-                background: white;
-                padding: 40px;
-                border-radius: 12px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            ">
-                <p style="
-                    font-size: 1.1em;
-                    line-height: 1.8;
-                    margin-bottom: 30px;
-                    color: #333;
-                ">
-                    MineLauncher 是一个开源的 Minecraft 游戏启动器，致力于为玩家提供简单高效的游戏体验。
-                    支持多版本管理、模组安装和资源包整合等功能。
-                </p>
-                <div class="developer-info" style="
-                    margin-top: 30px;
-                    padding-top: 30px;
-                    border-top: 1px solid #eee;
-                ">
-                    <h3 style="color: #3A8FE6; margin-bottom: 20px;">开发团队</h3>
-                    <p style="font-size: 1em; line-height: 1.6; color: #666;">
-                        <strong>Shu Shu</strong> - 主要开发者<br>
-                        <strong>Kyle</strong> - 功能实现<br>
-                        <strong>卡哇伊</strong> - 摸鱼+ai<br>
-                        <span style="color: #888;">在github找我们或者加入体验群</span>
-                    </p>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer>
+    <!-- 功能特色 -->
+    <section id="features" class="features-section">
         <div class="container">
-            <div class="social-icons">
-                <a href="#" aria-label="Bilibili"><i class="fab fa-bilibili"></i></a>
-                <a href="#" aria-label="微信"><i class="fab fa-weixin"></i></a>
-                <a href="https://github.com/shu-shu-1/MineLauncher" aria-label="GitHub" target="_blank"><i class="fab fa-github"></i></a>
+            <div class="section-header">
+                <h2>强大功能</h2>
+                <p>为Minecraft玩家量身打造的专业启动器</p>
             </div>
-            <p>&copy; <span id="year"></span> MineLauncher. 保留所有权利。</p>
-            <p>联系我们: kylejmarvin@gmail.com</p>
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-layer-group"></i>
+                    </div>
+                    <h3>多版本支持</h3>
+                    <p>支持从经典版本到最新快照的所有Minecraft版本，一键切换无缝体验</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-puzzle-piece"></i>
+                    </div>
+                    <h3>智能模组管理</h3>
+                    <p>自动检测模组兼容性，一键安装热门模组包，让您的游戏更加精彩</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3>极速启动</h3>
+                    <p>优化的启动流程，减少等待时间，让您更快进入游戏世界</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-palette"></i>
+                    </div>
+                    <h3>资源包整合</h3>
+                    <p>便捷的资源包管理系统，轻松切换不同的视觉风格和材质</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="500">
+                    <div class="feature-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>多账号管理</h3>
+                    <p>支持多个游戏账号，快速切换不同身份，满足不同游戏需求</p>
+                </div>
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="600">
+                    <div class="feature-icon">
+                        <i class="fas fa-server"></i>
+                    </div>
+                    <h3>服务器收藏</h3>
+                    <p>内置服务器管理器，收藏常用服务器，一键快速连接</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 下载区域 -->
+    <section id="download" class="download-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>立即下载</h2>
+                <p>选择适合您操作系统的版本</p>
+            </div>
+            <div class="download-grid">
+                <div class="download-card available">
+                    <div class="download-icon">
+                        <i class="fab fa-windows"></i>
+                    </div>
+                    <h3>Windows</h3>
+                    <p>支持 Windows 10/11</p>
+                    <div class="download-info">
+                        <span class="version">v0.1.0</span>
+                        <span class="size">45.2 MB</span>
+                    </div>
+                    <a href="https://github.com/shu-shu-1/MineLauncher" class="btn btn-primary" target="_blank">
+                        <i class="fas fa-download"></i>
+                        立即下载
+                    </a>
+                </div>
+                <div class="download-card coming-soon">
+                    <div class="download-icon">
+                        <i class="fab fa-apple"></i>
+                    </div>
+                    <h3>macOS</h3>
+                    <p>支持 macOS 10.15+</p>
+                    <div class="download-info">
+                        <span class="status">即将推出</span>
+                    </div>
+                    <button class="btn btn-disabled" disabled>
+                        <i class="fas fa-clock"></i>
+                        敬请期待
+                    </button>
+                </div>
+                <div class="download-card coming-soon">
+                    <div class="download-icon">
+                        <i class="fab fa-linux"></i>
+                    </div>
+                    <h3>Linux</h3>
+                    <p>支持主流发行版</p>
+                    <div class="download-info">
+                        <span class="status">即将推出</span>
+                    </div>
+                    <button class="btn btn-disabled" disabled>
+                        <i class="fas fa-clock"></i>
+                        敬请期待
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 开发团队 -->
+    <section id="team" class="team-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>开发团队</h2>
+                <p>致力于为玩家提供最佳体验的专业团队</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="team-avatar">
+                        <img src="img/shu-shu-1.jpg" alt="小树">
+                        <div class="avatar-overlay">
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-github"></i></a>
+                                <a href="#"><i class="fab fa-bilibili"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>小树</h3>
+                        <p class="team-role">项目发起者 & UI设计师 & 总开发</p>
+                        <p class="team-bio">负责项目整体规划和用户界面设计，致力于创造直观优雅的用户体验</p>
+                    </div>
+                </div>
+                <div class="team-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="team-avatar">
+                        <img src="img/kylemarvin884.png" alt="Kyle">
+                        <div class="avatar-overlay">
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-github"></i></a>
+                                <a href="#"><i class="fas fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>Kyle</h3>
+                        <p class="team-role">功能开发工程师</p>
+                        <p class="team-bio">负责启动器启动、登录等功能开发和性能优化，确保软件的稳定性和高效性</p>
+                    </div>
+                </div>
+                <div class="team-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="team-avatar">
+                        <img src="img/卡哇伊.jpg" alt="Kawayi">
+                        <div class="avatar-overlay">
+                            <div class="social-links">
+                                <a href="#"><i class="fab fa-github"></i></a>
+                                <a href="#"><i class="fas fa-envelope"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="team-info">
+                        <h3>卡哇伊</h3>
+                        <p class="team-role">AI技术专家</p>
+                        <p class="team-bio">专注于AI相关功能开发，为启动器带来智能化的用户体验</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>关于 MineLauncher</h2>
+                    <p>MineLauncher 是一个开源的 Minecraft 游戏启动器，由热爱游戏的开发者团队精心打造。我们致力于为全球 Minecraft 玩家提供最专业、最便捷的游戏启动解决方案。</p>
+                    <div class="about-features">
+                        <div class="about-feature">
+                            <i class="fas fa-code"></i>
+                            <span>开源免费</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>安全可靠</span>
+                        </div>
+                        <div class="about-feature">
+                            <i class="fas fa-heart"></i>
+                            <span>社区驱动</span>
+                        </div>
+                    </div>
+                    <!-- <div class="about-stats">
+                        <div class="stat">
+                            <span class="stat-number">2023</span>
+                            <span class="stat-label">项目启动</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">10K+</span>
+                            <span class="stat-label">下载量</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">5★</span>
+                            <span class="stat-label">用户评分</span>
+                        </div>
+                    </div> -->
+                </div>
+                <div class="about-image">
+                    <div class="image-placeholder">
+                        <i class="fas fa-cube"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-cube"></i>
+                        <span>MineLauncher</span>
+                    </div>
+                    <p>专业的Minecraft启动器，为您提供极致的游戏体验</p>
+                    <div class="social-links">
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="#" aria-label="Bilibili"><i class="fab fa-bilibili"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>产品</h4>
+                    <ul>
+                        <li><a href="#features">功能特色</a></li>
+                        <li><a href="#download">下载中心</a></li>
+                        <li><a href="#">更新日志</a></li>
+                        <li><a href="#">使用教程</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>支持</h4>
+                    <ul>
+                        <li><a href="#">帮助文档</a></li>
+                        <li><a href="#">常见问题</a></li>
+                        <li><a href="#">反馈建议</a></li>
+                        <li><a href="#">联系我们</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>联系方式</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-envelope"></i> zs3458222@outlook.com </p>
+                        <p><i class="fab fa-github"></i> github.com/shu-shu-1 </p>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; <span id="year"></span> MineLauncher. 保留所有权利。</p>
+                <div class="footer-links">
+                    <a href="#">隐私政策</a>
+                    <a href="#">服务条款</a>
+                </div>
+            </div>
         </div>
     </footer>
-    <script>
-        document.getElementById('year').textContent = new Date().getFullYear();
 
-        // 平滑滚动到指定区域
-        function scrollToSection(id) {
-            const element = document.getElementById(id);
-            if (element) {
-                const offset = 80; // 顶栏高度偏移
-                const targetPos = element.getBoundingClientRect().top + window.pageYOffset - offset;
-                window.scrollTo({
-                    top: targetPos,
-                    behavior: 'smooth'
-                });
-            }
-        }
+    <!-- 返回顶部按钮 -->
+    <button class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 
-        // 滚动淡入动画
-        const animateOnScroll = () => {
-            const elements = document.querySelectorAll('.feature, .developer-card, #download, .video-container, .about-section');
-            
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry, index) => {
-                    if (entry.isIntersecting) {
-                        setTimeout(() => {
-                            entry.target.classList.add('animate-fade-in');
-                        }, index * 100); // 交错动画延迟
-                    } else {
-                        entry.target.classList.remove('animate-fade-in');
-                    }
-                });
-            }, {
-                threshold: 0.15,
-                rootMargin: '0px 0px -150px 0px'
-            });
-
-            elements.forEach(element => {
-                element.style.opacity = '0';
-                element.style.transform = 'translateY(40px)';
-                element.style.transition = 'all 0.8s cubic-bezier(0.19, 1, 0.22, 1)';
-                element.style.transitionDelay = '0.1s';
-                observer.observe(element);
-            });
-        };
-
-        // 页面加载完成后初始化动画
-        window.addEventListener('DOMContentLoaded', animateOnScroll);
-    </script>
-
-    <style>
-        .animate-fade-in {
-            opacity: 1 !important;
-            transform: translateY(0) !important;
-            transition: all 0.8s cubic-bezier(0.19, 1, 0.22, 1) !important;
-        }
-    </style>
+    <script src="script.js"></script>
 </body>
 </html>
