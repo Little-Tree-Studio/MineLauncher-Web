@@ -52,6 +52,7 @@ body {
     top: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.95);
+    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
     z-index: 1000;
@@ -902,6 +903,7 @@ body {
         width: 100%;
         height: calc(100vh - 70px);
         background: rgba(255, 255, 255, 0.98);
+        -webkit-backdrop-filter: blur(20px);
         backdrop-filter: blur(20px);
         flex-direction: column;
         justify-content: flex-start;
