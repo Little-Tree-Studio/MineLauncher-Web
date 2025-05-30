@@ -148,9 +148,29 @@ body {
     width: 100%;
     height: 100%;
     background-image: url('img/back.png');
-    background-size: cover;
+    background-size: contain;
     background-position: center;
+    background-repeat: no-repeat;
     z-index: 1;
+    animation: float 20s ease-in-out infinite;
+}
+
+/* 竖屏模式优化 */
+@media (orientation: portrait) {
+    .hero-background {
+        background-size: 100% auto;
+        background-position: center 20%;
+        transform-origin: center 20%;
+    }
+}
+
+/* 横屏模式优化 */
+@media (orientation: landscape) {
+    .hero-background {
+        background-size: contain;
+        background-position: center;
+        transform-origin: center center;
+    }
 }
 
 .hero-overlay {
@@ -854,13 +874,43 @@ body {
 
 @keyframes float {
     0% {
-        transform: translateY(0);
+        transform: translateY(0) scale(1.1);
     }
     50% {
-        transform: translateY(-10px);
+        transform: translateY(-20px) scale(1.15);
     }
     100% {
-        transform: translateY(0);
+        transform: translateY(0) scale(1.1);
+    }
+}
+
+/* 竖屏模式的动画 */
+@media (orientation: portrait) {
+    @keyframes float {
+        0% {
+            transform: translateY(0) scale(1.05);
+        }
+        50% {
+            transform: translateY(-10px) scale(1.08);
+        }
+        100% {
+            transform: translateY(0) scale(1.05);
+        }
+    }
+}
+
+/* 横屏模式的动画 */
+@media (orientation: landscape) {
+    @keyframes float {
+        0% {
+            transform: translateY(0) scale(1.1);
+        }
+        50% {
+            transform: translateY(-20px) scale(1.15);
+        }
+        100% {
+            transform: translateY(0) scale(1.1);
+        }
     }
 }
 
