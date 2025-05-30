@@ -1,55 +1,86 @@
-# MineLauncher - Minecraft游戏启动器
+# Minecraft启动器宣传网站
 
-![MineLauncher Logo](https://via.placeholder.com/150x150.png?text=MineLauncher)
+这是一个为Minecraft启动器设计的宣传网站，展示启动器的功能特点、下载选项和开发团队信息。
 
-MineLauncher是一个轻量高效的Minecraft游戏启动器，提供丰富的功能和优秀的用户体验。
+## 功能特点
 
-## ✨ 功能特点
+- **响应式设计**：适配各种屏幕尺寸，从手机到桌面设备
+- **动画效果**：平滑的滚动动画和交互效果
+- **视频展示**：内置视频播放功能，展示启动器实际运行
+- **统计数字**：动态数字计数动画，增强视觉效果
+- **移动端优化**：汉堡菜单和触摸友好的交互元素
 
-- 多版本支持：轻松切换不同Minecraft版本
-- 模组管理：一键安装和更新模组
-- 资源包整合：便捷管理游戏资源
-- 多账号切换：支持多个游戏账号
-- 服务器收藏：快速访问常用服务器
-- 游戏统计：记录游戏时长和成就
-- 自动更新：保持最新版本
-- 截图管理：查看游戏精彩瞬间
-- 自定义皮肤：上传个性皮肤
-- 轻量高效：低资源占用，快速启动
+## 目录结构
 
-## 🚀 快速开始
+```
+├── img/                  # 图片资源
+│   ├── back.png          # 背景图片
+│   ├── kylemarvin884.png # 团队成员头像
+│   ├── shu-shu-1.jpg     # 团队成员头像
+│   └── 卡哇伊.jpg        # 团队成员头像
+├── vid/                  # 视频资源
+│   └── test.mp4          # 宣传视频
+├── index.html            # 主页面
+├── script.js             # JavaScript交互逻辑
+├── styles.css            # 样式表
+└── README.md             # 项目说明文档
+```
 
-### 系统要求
-- Windows 7/10/11
-- Java 8或更高版本
-- 2GB以上内存
+## 安装与运行
 
-### 安装步骤
-1. 下载最新版本 [Windows版](https://github.com/shu-shu-1/MineLauncher)
-2. 运行安装程序并按照提示完成安装
-3. 启动MineLauncher
-4. 登录您的Minecraft账号
-5. 选择游戏版本并开始游戏
+1. 克隆或下载项目代码
+2. 确保所有资源文件路径正确
+3. 直接在浏览器中打开`index.html`即可运行
 
-## 🛠️ 开发者
+无需服务器或额外依赖，这是一个纯静态网站。
 
-**Shu Shu** - Minecraft爱好者 & 开发者  
-[GitHub](https://github.com/shu-shu-1) | [Email](mailto:contact@minelauncher.example)
+## 开发说明
 
-## 📜 许可证
+### 核心文件
 
-本项目采用 [MIT License](LICENSE)
+- **index.html**: 主页面结构
+- **script.js**: 处理所有交互逻辑，包括：
+  - 导航栏滚动效果
+  - 移动端菜单切换
+  - 平滑滚动和返回顶部
+  - 视频播放控制
+  - 滚动动画和数字计数效果
+- **styles.css**: 包含所有样式定义，使用CSS变量实现主题一致性
 
-## 🤝 贡献指南
+### 自定义修改
 
-欢迎提交Pull Request或Issue报告问题。
+1. **修改内容**:
+   - 直接编辑`index.html`中的HTML内容
+   - 更新`img/`和`vid/`目录中的资源文件
+
+2. **样式调整**:
+   - 修改`styles.css`中的CSS变量来改变主题颜色
+   ```css
+   :root {
+     --primary-color: #3A8FE6;
+     --secondary-color: #4CAF50;
+     /* 其他变量... */
+   }
+   ```
+
+3. **功能扩展**:
+   - 在`script.js`中添加新的交互逻辑
+   - 确保新功能在移动端和桌面端都能正常工作
+
+## 贡献指南
+
+欢迎贡献代码！请遵循以下步骤：
 
 1. Fork本项目
-2. 创建您的功能分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交您的更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 提交Pull Request
+2. 创建新分支 (`git checkout -b feature/your-feature`)
+3. 提交更改 (`git commit -am 'Add some feature'`)
+4. 推送到分支 (`git push origin feature/your-feature`)
+5. 创建Pull Request
 
-## 📞 联系我们
+## 许可证
 
-如有任何问题或建议，请联系：kylejmarvin@gmail.com
+本项目采用 [MIT 许可证](LICENSE)。
+
+---
+
+© 2025 Minecraft启动器团队. 保留所有权利。
