@@ -52,7 +52,6 @@ body {
     top: 0;
     width: 100%;
     background: rgba(255, 255, 255, 0.95);
-    -webkit-backdrop-filter: blur(20px);
     backdrop-filter: blur(20px);
     border-bottom: 1px solid var(--border-color);
     z-index: 1000;
@@ -148,29 +147,9 @@ body {
     width: 100%;
     height: 100%;
     background-image: url('img/back.png');
-    background-size: contain;
+    background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
     z-index: 1;
-    animation: float 20s ease-in-out infinite;
-}
-
-/* 竖屏模式优化 */
-@media (orientation: portrait) {
-    .hero-background {
-        background-size: 100% auto;
-        background-position: center 20%;
-        transform-origin: center 20%;
-    }
-}
-
-/* 横屏模式优化 */
-@media (orientation: landscape) {
-    .hero-background {
-        background-size: contain;
-        background-position: center;
-        transform-origin: center center;
-    }
 }
 
 .hero-overlay {
@@ -398,38 +377,18 @@ body {
 
 .features-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    justify-items: center;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 2rem;
 }
 
 .feature-card {
     background: white;
-    padding: 1.5rem;
+    padding: 2rem;
     border-radius: var(--border-radius);
     box-shadow: var(--shadow-light);
     transition: var(--transition);
     border: 1px solid var(--border-color);
     text-align: center;
-    width: 100%;
-    max-width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.feature-card .feature-icon {
-    margin-bottom: 1rem;
-    height: 60px;
-    width: 60px;
-}
-
-.feature-card h3 {
-    margin-bottom: 0.5rem;
-}
-
-.feature-card p {
-    margin-top: 0;
 }
 
 .feature-card:hover {
@@ -860,86 +819,6 @@ body {
     }
 }
 
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    100% {
-        transform: scale(1);
-    }
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0) scale(1.1);
-    }
-    50% {
-        transform: translateY(-20px) scale(1.15);
-    }
-    100% {
-        transform: translateY(0) scale(1.1);
-    }
-}
-
-/* 竖屏模式的动画 */
-@media (orientation: portrait) {
-    @keyframes float {
-        0% {
-            transform: translateY(0) scale(1.05);
-        }
-        50% {
-            transform: translateY(-10px) scale(1.08);
-        }
-        100% {
-            transform: translateY(0) scale(1.05);
-        }
-    }
-}
-
-/* 横屏模式的动画 */
-@media (orientation: landscape) {
-    @keyframes float {
-        0% {
-            transform: translateY(0) scale(1.1);
-        }
-        50% {
-            transform: translateY(-20px) scale(1.15);
-        }
-        100% {
-            transform: translateY(0) scale(1.1);
-        }
-    }
-}
-
-@keyframes gradientShift {
-    0% {
-        background-position: 0% 50%;
-    }
-    50% {
-        background-position: 100% 50%;
-    }
-    100% {
-        background-position: 0% 50%;
-    }
-}
-
-/* 新增动画类 */
-.animate-pulse {
-    animation: pulse 2s infinite;
-}
-
-.animate-float {
-    animation: float 3s ease-in-out infinite;
-}
-
-.animate-gradient {
-    background-size: 200% 200%;
-    animation: gradientShift 8s ease infinite;
-}
-
 /* 响应式设计 */
 @media (max-width: 768px) {
     .hamburger {
@@ -953,7 +832,6 @@ body {
         width: 100%;
         height: calc(100vh - 70px);
         background: rgba(255, 255, 255, 0.98);
-        -webkit-backdrop-filter: blur(20px);
         backdrop-filter: blur(20px);
         flex-direction: column;
         justify-content: flex-start;
